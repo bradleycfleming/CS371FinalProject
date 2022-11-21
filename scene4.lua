@@ -1,6 +1,7 @@
 -- Jacob Dumbacher & Bradley Fleming
 -- CS 371 Project Phase 2
 -- 28 November 2022
+-- Scene 4 - Credits
 
 local composer = require( "composer" )
 local scene = composer.newScene()
