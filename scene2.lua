@@ -106,81 +106,81 @@ function scene:create( event )
    background = display.newRect(sceneGroup, display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
    background:setFillColor(0.65, 0.5, 1)
 
-   building1 = display.newImage(sceneGroup, "Resources\\Background\\bgg.png", display.contentCenterX, display.contentCenterY * 0.6)
+   building1 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX, display.contentCenterY * 0.6)
    building1.xScale = 4;
    building1.yScale = 4;
    table.insert(buildings_1, building1);
-   building1_2 = display.newImage(sceneGroup, "Resources\\Background\\bgg.png", display.contentCenterX + 512, display.contentCenterY * 0.6)
+   building1_2 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX + 512, display.contentCenterY * 0.6)
    building1_2.xScale = 4;
    building1_2.yScale = 4;
    table.insert(buildings_1, building1_2);
-   building1_3 = display.newImage(sceneGroup, "Resources\\Background\\bgg.png", display.contentCenterX - 512, display.contentCenterY * 0.6)
+   building1_3 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX - 512, display.contentCenterY * 0.6)
    building1_3.xScale = 4;
    building1_3.yScale = 4;
    table.insert(buildings_1, building1_3);
 
-   building2 = display.newImage(sceneGroup, "Resources\\Background\\bgf.png", display.contentCenterX, display.contentCenterY * 0.6)
+   building2 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX, display.contentCenterY * 0.6)
    building2.xScale = 4;
    building2.yScale = 4;
    table.insert(buildings_2, building2);
-   building2_2 = display.newImage(sceneGroup, "Resources\\Background\\bgf.png", display.contentCenterX + 512, display.contentCenterY * 0.6)
+   building2_2 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX + 512, display.contentCenterY * 0.6)
    building2_2.xScale = 4;
    building2_2.yScale = 4;
    table.insert(buildings_2, building2_2);
-   building2_3 = display.newImage(sceneGroup, "Resources\\Background\\bgf.png", display.contentCenterX - 512, display.contentCenterY * 0.6)
+   building2_3 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX - 512, display.contentCenterY * 0.6)
    building2_3.xScale = 4;
    building2_3.yScale = 4;
    table.insert(buildings_2, building2_3);
 
-   ground = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX, display.contentHeight * 0.90);
+   ground = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX, display.contentHeight * 0.90);
    ground.xScale = 4;
    ground.yScale = 4;
    table.insert(grounds, ground);
-   ground_2 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX - 128, display.contentHeight * 0.90);
+   ground_2 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 128, display.contentHeight * 0.90);
    ground_2.xScale = 4;
    ground_2.yScale = 4;
    table.insert(grounds, ground_2);
-   ground_3 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX + 128, display.contentHeight * 0.90);
+   ground_3 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 128, display.contentHeight * 0.90);
    ground_3.xScale = 4;
    ground_3.yScale = 4;
    table.insert(grounds, ground_3);
-   ground_4 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX - 256, display.contentHeight * 0.90);
+   ground_4 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 256, display.contentHeight * 0.90);
    ground_4.xScale = 4;
    ground_4.yScale = 4;
    table.insert(grounds, ground_4);
-   ground_5 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX + 256, display.contentHeight * 0.90);
+   ground_5 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 256, display.contentHeight * 0.90);
    ground_5.xScale = 4;
    ground_5.yScale = 4;
    table.insert(grounds, ground_5);
-   ground_6 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX + 384, display.contentHeight * 0.90);
+   ground_6 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 384, display.contentHeight * 0.90);
    ground_6.xScale = 4;
    ground_6.yScale = 4;
    table.insert(grounds, ground_6);
-   ground_7 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX - 384, display.contentHeight * 0.90);
+   ground_7 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 384, display.contentHeight * 0.90);
    ground_7.xScale = 4;
    ground_7.yScale = 4;
    table.insert(grounds, ground_7);
-   ground_8 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX + 512, display.contentHeight * 0.90);
+   ground_8 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 512, display.contentHeight * 0.90);
    ground_8.xScale = 4;
    ground_8.yScale = 4;
    table.insert(grounds, ground_8);
-   ground_9 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX - 512, display.contentHeight * 0.90);
+   ground_9 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 512, display.contentHeight * 0.90);
    ground_9.xScale = 4;
    ground_9.yScale = 4;
    table.insert(grounds, ground_9);
-   ground_10 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX + 640, display.contentHeight * 0.90);
+   ground_10 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 640, display.contentHeight * 0.90);
    ground_10.xScale = 4;
    ground_10.yScale = 4;
    table.insert(grounds, ground_10);
-   ground_11 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX - 640, display.contentHeight * 0.90);
+   ground_11 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 640, display.contentHeight * 0.90);
    ground_11.xScale = 4;
    ground_11.yScale = 4;
    table.insert(grounds, ground_11);
-   ground_12 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX + 768, display.contentHeight * 0.90);
+   ground_12 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 768, display.contentHeight * 0.90);
    ground_12.xScale = 4;
    ground_12.yScale = 4;
    table.insert(grounds, ground_12);
-   ground_13 = display.newImage(sceneGroup, "Resources\\Background\\sprite13-sheet0.png", display.contentCenterX - 768, display.contentHeight * 0.90);
+   ground_13 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 768, display.contentHeight * 0.90);
    ground_13.xScale = 4;
    ground_13.yScale = 4;
    table.insert(grounds, ground_13);
