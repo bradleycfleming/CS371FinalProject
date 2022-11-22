@@ -3,7 +3,6 @@
 -- 28 November 2022
 -- Scene 2 - Game Play
 
--- local lfs = require( "lfs" )
 local composer = require( "composer" )
 local scene = composer.newScene()
  
@@ -222,31 +221,6 @@ function scene:create( event )
       composer.gotoScene("scene1", options);
    end
 
-   -- local function moveBackground()
-   --    print("running")
-   --    local groundSpeed = 5;
-   --    local building1Speed = 2;
-   --    local building2Speed = 3;
-   --    for _, building in ipairs(buildings_1) do
-   --       building.x = building.x - building1Speed;
-   --       if(building.x < -512) then
-   --          table.remove(buildings_1, _);
-   --          newBuilding = display.newImage(sceneGroup, "Resources\\Background\\bgg.png", display.contentCenterX + 512, display.contentCenterY * 0.6)
-   --          newBuilding.xScale = 4;
-   --          newBuilding.yScale = 4;
-   --          table.insert(buildings_1, newBuilding);
-   --       end
-   --    end
-   --    for _, building in ipairs(buildings_2) do
-   --       building.x = building.x - building2Speed;
-   --    end
-   --    for _, ground in ipairs(grounds) do
-   --       ground.x = ground.x - groundSpeed;
-   --    end
-   -- end
-
-   -- timer.performWithDelay(16.777, moveBackground, 0)
-
    buttonBack:addEventListener("tap", back);
 
 
@@ -285,6 +259,31 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
+
+      local function moveBackground()
+         print("running")
+         local groundSpeed = 5;
+         local building1Speed = 2;
+         local building2Speed = 3;
+         for _, building in ipairs(buildings_1) do
+            building.x = building.x - building1Speed;
+            if(building.x < -512) then
+               table.remove(buildings_1, _);
+               newBuilding = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX + 512, display.contentCenterY * 0.6)
+               newBuilding.xScale = 4;
+               newBuilding.yScale = 4;
+               table.insert(buildings_1, newBuilding);
+            end
+         end
+         for _, building in ipairs(buildings_2) do
+            building.x = building.x - building2Speed;
+         end
+         for _, ground in ipairs(grounds) do
+            ground.x = ground.x - groundSpeed;
+         end
+      end
+
+      timer.performWithDelay(16.777, moveBackground, 0)
       
       Runtime:addEventListener("tap", userTap)
    end
