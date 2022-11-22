@@ -3,6 +3,7 @@
 -- 28 November 2022
 -- Scene 2 - Game Play
 
+-- local lfs = require( "lfs" )
 local composer = require( "composer" )
 local scene = composer.newScene()
  
@@ -50,11 +51,15 @@ local obstacle_opt = {
    }
 }
 
-local runningMan_sheet = graphics.newImageSheet("Resources\\Sprite\\spritesheet.png", runningMan_opt)
+-- Setup File Path to Resources
+-- local docs_path = system.pathForFile( "", system.ResourceDirectory)
 
-local drone_sheet = graphics.newImageSheet("Resources\\Obstacles\\Drone.png", drone_opt)
 
-local obstacle_sheet = graphics.newImageSheet("Resources\\Obstacles\\Obstacles.png", obstacle_opt)
+local runningMan_sheet = graphics.newImageSheet("Resources/Sprite/spritesheet.png", runningMan_opt)
+
+local drone_sheet = graphics.newImageSheet("Resources/Obstacles/Drone.png", drone_opt)
+
+local obstacle_sheet = graphics.newImageSheet("Resources/Obstacles/Obstacles.png", obstacle_opt)
 
 
 local runningMan_sequenceData = {
