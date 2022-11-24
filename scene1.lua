@@ -258,10 +258,7 @@ function scene:hide( event )
       runningMan:pause();
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
-      -- backgroundGroup:removeSelf( );
-      -- backgroundGroup = nil;
-      -- foregroundGroup:removeSelf( );
-      -- foregroundGroup = nil;
+      
    end
 end
 
