@@ -101,7 +101,7 @@ function scene:create( event )
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
-   -- lavendar background
+   -- lavender background
    background = display.newRect(sceneGroup, display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
    background:setFillColor(0.65, 0.5, 1)
 
@@ -216,8 +216,8 @@ function scene:create( event )
 
    local function back (event)
       print("hello")
-      runningMan:setSequence("idle");
-      runningMan:play();
+      -- runningMan:setSequence("idle");
+      -- runningMan:play();
       composer.gotoScene("scene1", options);
    end
 
@@ -301,6 +301,7 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
+      -- sceneGroup:removeSelf();
 
       -- Runtime:removeEventListener( "tap", userTap)
    end
@@ -308,15 +309,15 @@ end
  
 -- "scene:destroy()"
 function scene:destroy( event )
- 
+
    local sceneGroup = self.view
-   sceneGroup.remove(runningMan);
- 
+   -- sceneGroup.remove(runningMan);
+
    -- Called prior to the removal of scene's view ("sceneGroup").
    -- Insert code here to clean up the scene.
    -- Example: remove display objects, save state, etc.
 end
- 
+
 ---------------------------------------------------------------------------------
  
 -- Listener setup
