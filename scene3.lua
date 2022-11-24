@@ -19,6 +19,25 @@ local scene = composer.newScene()
 function scene:create( event )
  
    local sceneGroup = self.view
+
+   background = display.newRect(display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
+   background:setFillColor(0.65, 0.5, 1, 1);
+   sceneGroup:insert(background);
+
+   local buttonBack = display.newRect(display.contentCenterX,50,100,50);
+   sceneGroup:insert(buttonBack);
+   
+   local options = {
+      effect = "slideDown",
+      time = 100
+   }
+
+   local function back (event)
+      print("Back button pressed - going to scene 1")
+      composer.gotoScene("scene1", options);
+   end
+
+   buttonBack:addEventListener("tap", back);
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
