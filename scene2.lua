@@ -5,6 +5,7 @@
 
 local composer = require( "composer" )
 local scene = composer.newScene()
+local physics = require("physics");
  
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -225,14 +226,25 @@ function scene:create( event )
    obstacle1 = display.newSprite(obstacle_sheet, obstacle_sequenceData)
    obstacle1.xScale = 3;
    obstacle1.yScale = 3;
-   obstacle1.x = display.contentCenterX * 0.6;
-   obstacle1.y = display.contentCenterY * 1.25 + 40;
+   obstacle1.x = display.contentCenterX * 1.8;
+   obstacle1.y = display.contentCenterY * 1.25 + 30;
+   obstacle1.myName = "Danger";
    sceneGroup:insert(obstacle1);
 
 
    local buttonBack = display.newRect(display.contentCenterX,50,100,50);
    sceneGroup:insert(buttonBack);
-   
+
+   invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 70, display.contentWidth, 64);
+   invisibleGroundPlatform:setFillColor(0.5, 0, 0);
+   invisibleGroundPlatform.alpha = 0;
+   invisibleGroundPlatform.yScale = 4;
+   invisibleGroundPlatform.xScale = 4;
+   invisibleGroundPlatform.myName = "Ground";
+   sceneGroup:insert(invisibleGroundPlatform);
+
+   currentJump = false;
+
    local options = {
       effect = "slideDown",
       time = 100
@@ -253,10 +265,30 @@ function scene:create( event )
          runningMan:setSequence("crouch");
       -- right tap
       else
-         runningMan:setSequence("jump");
+         if(currentJump == false) then
+            runningMan:setSequence("jump");
+            runningMan:applyLinearImpulse(0, -70, runningMan.x, runningMan.y);
+            currentJump = true;
+         end
       end
       runningMan:play()
    end
+
+   function onCollision(self, event)
+      if ( event.phase == "began" ) then
+         if(event.other.myName == "Ground") then
+            currentJump = false;
+            runningMan:setSequence("running");
+            runningMan:play();
+         elseif(event.other.myName == "Danger") then
+            print("DANGER")
+         end
+      elseif ( event.phase == "ended" ) then
+         print("ended")
+      end
+
+   end
+
 end
  
 -- "scene:show()"
@@ -273,17 +305,20 @@ function scene:show( event )
       drone:setSequence("flying");
       
       obstacle1:setSequence("trash");
-      
+      physics.start();
+      physics.setGravity (0, 9.8*2);
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-      runningMan:play();
       drone:play();
       obstacle1:play();
+      runningMan:play();
+      physics.addBody(runningMan, "dynamic", {bounce = 0});
+      physics.addBody(invisibleGroundPlatform, "static", {bounce = 0});
 
       local function moveBackground()
-         print("running")
          local groundSpeed = 3.6;
          local building1Speed = 1;
          local building2Speed = 3;
@@ -305,11 +340,17 @@ function scene:show( event )
                ground.x = 1200;
             end
          end
+         obstacle1.x = obstacle1.x - groundSpeed;
+         if(obstacle1.x < -512) then
+            obstacle1.x = 1200;
+         end
       end
 
-      timer.performWithDelay(100, moveBackground, 0)
+      timer.performWithDelay(33.333, moveBackground, 0)
       
       Runtime:addEventListener("tap", userTap)
+      runningMan.collision = onCollision
+      runningMan:addEventListener( "collision" )
    end
 end
  
