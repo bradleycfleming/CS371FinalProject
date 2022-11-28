@@ -3,6 +3,7 @@
 -- 28 November 2022
 -- Scene 3 - High Scores
 
+local csv = require("csv")
 local composer = require( "composer" )
 local scene = composer.newScene()
  
