@@ -92,6 +92,9 @@ local speed;
 local buildings_1 = {};
 local buildings_2 = {};
 local grounds = {};
+local invisibleObstacles = {};
+local visibleObstacles = {};
+local invisibleAlpha = 0.3;
 ---------------------------------------------------------------------------------
  
 -- "scene:create()"
@@ -227,23 +230,44 @@ function scene:create( event )
    obstacle1.xScale = 3;
    obstacle1.yScale = 3;
    obstacle1.x = display.contentCenterX * 1.8;
-   obstacle1.y = display.contentCenterY * 1.25 + 30;
+   obstacle1.y = display.contentCenterY * 1.25 + 20;
    obstacle1.myName = "Danger";
    sceneGroup:insert(obstacle1);
+   table.insert(visibleObstacles, obstacle1);
+
+   invisibleObstacle1 = display.newRect(obstacle1.x, obstacle1.y, 80, 96);
+   invisibleObstacle1:setFillColor(0.5, 0, 0);
+   invisibleObstacle1.alpha = invisibleAlpha;
+   invisibleObstacle1.yScale = 1;
+   invisibleObstacle1.xScale = 1;
+   invisibleObstacle1.myName = "Danger";
+   sceneGroup:insert(invisibleObstacle1);
+   table.insert(invisibleObstacles, invisibleObstacle1);
 
 
    local buttonBack = display.newRect(display.contentCenterX,50,100,50);
    sceneGroup:insert(buttonBack);
 
-   invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 70, display.contentWidth, 64);
-   invisibleGroundPlatform:setFillColor(0.5, 0, 0);
-   invisibleGroundPlatform.alpha = 0;
-   invisibleGroundPlatform.yScale = 4;
-   invisibleGroundPlatform.xScale = 4;
+   invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 20, display.contentWidth, 256);
+   invisibleGroundPlatform:setFillColor(0, 0, 0.5);
+   invisibleGroundPlatform.alpha = invisibleAlpha;
+   invisibleGroundPlatform.yScale = 1;
+   invisibleGroundPlatform.xScale = 1;
    invisibleGroundPlatform.myName = "Ground";
    sceneGroup:insert(invisibleGroundPlatform);
 
+   invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 100, 160);
+   invisiblePlayer:setFillColor(0, 0.5, 0);
+   invisiblePlayer.alpha = invisibleAlpha;
+   invisiblePlayer.yScale = 1;
+   invisiblePlayer.xScale = 1;
+   invisiblePlayer.myName = "Player";
+   sceneGroup:insert(invisiblePlayer);
+
+
+
    currentJump = false;
+   pauseGame = false;
 
    local options = {
       effect = "slideDown",
@@ -259,29 +283,45 @@ function scene:create( event )
 
 
    function userTap(event)
-      print("userTap")
-      --left tap
-      if(event.x < display.contentCenterX) then
-         runningMan:setSequence("crouch");
-      -- right tap
-      else
-         if(currentJump == false) then
-            runningMan:setSequence("jump");
-            runningMan:applyLinearImpulse(0, -70, runningMan.x, runningMan.y);
-            currentJump = true;
+      if(not pauseGame) then
+         --left tap
+         if(event.x < display.contentCenterX) then
+            runningMan:setSequence("crouch");
+         -- right tap
+         else
+            if(currentJump == false) then
+               runningMan:setSequence("jump");
+               invisiblePlayer:applyLinearImpulse(0, -3, invisiblePlayer.x, invisiblePlayer.y);
+               currentJump = true;
+            end
          end
+         runningMan:play()
       end
-      runningMan:play()
+   end
+
+   function pauseGameMethod(pauseBool)
+      pauseGame = pauseBool;
+      if(pauseBool) then      
+         runningMan:pause();
+         physics.pause();
+      else
+         runningMan:play();
+         physics.start();
+      end
    end
 
    function onCollision(self, event)
       if ( event.phase == "began" ) then
-         if(event.other.myName == "Ground") then
+         -- running into obstacle
+         if(event.other.myName == "Danger") then
+            print("DANGER")
+            pauseGameMethod(true);
+         -- landing from a jump
+         elseif(event.other.myName == "Ground") then
             currentJump = false;
             runningMan:setSequence("running");
             runningMan:play();
-         elseif(event.other.myName == "Danger") then
-            print("DANGER")
+            print("running")
          end
       elseif ( event.phase == "ended" ) then
          print("ended")
@@ -314,43 +354,57 @@ function scene:show( event )
       -- Example: start timers, begin animation, play audio, etc.
       drone:play();
       obstacle1:play();
-      runningMan:play();
-      physics.addBody(runningMan, "dynamic", {bounce = 0});
+      -- runningMan:play();
+      physics.addBody(invisiblePlayer, "dynamic", {bounce = 0});
       physics.addBody(invisibleGroundPlatform, "static", {bounce = 0});
+      physics.addBody(invisibleObstacle1, "static", {bounce = 0});
+
+      -- unpauses the game after re-entering
+      pauseGameMethod(false);
 
       local function moveBackground()
-         local groundSpeed = 3.6;
-         local building1Speed = 1;
-         local building2Speed = 3;
-         for _, building in ipairs(buildings_1) do
-            building.x = building.x - building1Speed;
-            if(building.x < -512) then
-               building.x = 1300;
+         if(not pauseGame) then
+            local groundSpeed = 10;
+            local building1Speed = 2;
+            local building2Speed = 6;
+            for _, building in ipairs(buildings_1) do
+               building.x = building.x - building1Speed;
+               if(building.x < -512) then
+                  building.x = 1300;
+               end
             end
-         end
-         for _, building in ipairs(buildings_2) do
-            building.x = building.x - building2Speed;
-            if(building.x < -512) then
-               building.x = 1400;
+            for _, building in ipairs(buildings_2) do
+               building.x = building.x - building2Speed;
+               if(building.x < -512) then
+                  building.x = 1400;
+               end
             end
-         end
-         for _, ground in ipairs(grounds) do
-            ground.x = ground.x - groundSpeed;
-            if(ground.x < -512) then
-               ground.x = 1200;
+            for _, ground in ipairs(grounds) do
+               ground.x = ground.x - groundSpeed;
+               if(ground.x < -512) then
+                  ground.x = 1200;
+               end
             end
-         end
-         obstacle1.x = obstacle1.x - groundSpeed;
-         if(obstacle1.x < -512) then
-            obstacle1.x = 1200;
+            for _, obstacle in ipairs(invisibleObstacles) do
+               obstacle.x = obstacle.x - groundSpeed;
+               if(obstacle.x < -512) then
+                  obstacle.x = 1200;
+               end
+               visibleObstacles[_].x = obstacle.x;
+            end
+            runningMan.y = invisiblePlayer.y - 12;
+
          end
       end
 
-      timer.performWithDelay(33.333, moveBackground, 0)
+      -- if statement prevents the game from performing moveBackground multiple times after opening scene2 multiple times
+      if(timer1 == nil) then
+         timer1 = timer.performWithDelay(33.333, moveBackground, 0)
+      end
       
       Runtime:addEventListener("tap", userTap)
-      runningMan.collision = onCollision
-      runningMan:addEventListener( "collision" )
+      invisiblePlayer.collision = onCollision
+      invisiblePlayer:addEventListener("collision")
    end
 end
  
@@ -365,8 +419,12 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       runningMan:pause();
+
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
+      Runtime:removeEventListener("tap", userTap)
+      pauseGameMethod(true);
+      -- invisiblePlayer:removeEventListener("collision")
    end
 end
  
