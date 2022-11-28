@@ -28,20 +28,59 @@ function scene:create( event )
    background:setFillColor(0.65, 0.5, 1, 1);
    sceneGroup:insert(background);
 
-   local buttonBack = display.newRect(display.contentCenterX,50,100,50);
-   sceneGroup:insert(buttonBack);
+   -- local buttonBack = display.newRect(display.contentCenterX,50,100,50);
+   -- sceneGroup:insert(buttonBack);
    
-   local options = {
-      effect = "slideDown",
-      time = 100
-   }
+   -- local options = {
+   --    effect = "slideDown",
+   --    time = 100
+   -- }
 
-   local function back (event)
-      print("Back button pressed - going to scene 1")
-      composer.gotoScene("scene1", options);
+   -- local function back (event)
+   --    print("Back button pressed - going to scene 1")
+   --    composer.gotoScene("scene1", options);
+   -- end
+
+   -- buttonBack:addEventListener("tap", back);
+
+
+   local function handleButton1Event (event)
+      composer.gotoScene("scene1", {
+         effect = "slideDown",
+         time = 100,
+         params = {}
+      });
    end
 
-   buttonBack:addEventListener("tap", back);
+   local button1 = widget.newButton( {
+      label = "button1",
+      onEvent = handleButton1Event,
+      emboss = false,
+      shape = "roundedRect",
+      width = 500,
+      height = 80,
+      cornerRadius = 2,
+      fillColor = { default = {0, 0, 1, 0.4}, over={}},
+      strokeColor = { default = {0, 0, 0, 0}, over={}},
+      strokeWidth = 0,
+      fontSize = 36,
+      labelColor = {default = {1, 1, 1, 1}, over={}}
+
+   });
+
+   button1.x = display.contentCenterX;
+   button1.y = display.contentCenterY + 200;
+   button1:setLabel( "Return to Main Menu" );
+   sceneGroup:insert(button1);
+
+   local function handleButton2Event (event)
+      composer.gotoScene("scene3", {
+         effect = "slideUp",
+         time = 100,
+         params = {
+      }
+      });
+   end
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -55,9 +94,10 @@ function scene:show( event )
  
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
-      -- background = display.newRect(display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
-      -- background:setFillColor(0.65, 0.5, 1, 1);
-      -- sceneGroup:insert(background);
+      
+      
+
+
       print("Show Scene 4");
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
