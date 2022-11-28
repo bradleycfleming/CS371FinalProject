@@ -81,7 +81,16 @@ function scene:create( event )
       }
       });
    end
- 
+
+   local titleText = display.newText("City Runner", display.contentCenterX, display.contentCenterY - 200, native.systemFontBold,36);
+   sceneGroup:insert(titleText);
+
+   local creatorText = display.newText("Created by Jacob Dumbacher and Bradley Fleming for CS 371", display.contentCenterX, display.contentCenterY - 30, native.systemFont,24);
+   sceneGroup:insert(creatorText);
+
+   local creditsText = display.newText("Open Source Credits Available Here: https://raw.githubusercontent.com/bradleycfleming/CS371FinalProject/main/OpenSourceAcknowledgements.md", display.contentCenterX, display.contentCenterY + 20, native.systemFont, 16)
+   sceneGroup:insert(creditsText);
+
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 end
