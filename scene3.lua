@@ -3,8 +3,10 @@
 -- 28 November 2022
 -- Scene 3 - High Scores
 
+local csv = require("csv")
 local composer = require( "composer" )
 local scene = composer.newScene()
+local csvFile = "";
  
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -33,11 +35,15 @@ function scene:create( event )
    }
 
    local function back (event)
-      print("Back button pressed - going to scene 1")
+      print("Back button pressed - going to scene 1");
       composer.gotoScene("scene1", options);
    end
 
    buttonBack:addEventListener("tap", back);
+
+   -- Create Leaderboard File
+   
+   csvFile = csv.open(system.pathForFile("leaderboard.csv"), {separator = ",", header = false});
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -51,6 +57,7 @@ function scene:show( event )
  
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.

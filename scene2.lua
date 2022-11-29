@@ -8,6 +8,52 @@ local scene = composer.newScene()
 local physics = require("physics");
 local widget = require( "widget" ); 
 
+
+local background;
+local building1;
+local building1_2;
+local building1_3;
+local building1_4;
+local building2;
+local building2_2;
+local building2_3;
+local building2_4;
+local ground;
+local ground_2;
+local ground_3;
+local ground_4;
+local ground_5;
+local ground_6;
+local ground_7;
+local ground_8;
+local ground_9;
+local ground_10;
+local ground_11;
+local ground_12;
+local ground_13;
+local ground_14;
+local ground_15;
+local ground_16;
+local ground_17;
+local runningMan;
+local drone;
+local obstacle1;
+local invisibleObstacle1;
+local invisibleGroundPlatform;
+local invisiblePlayer;
+
+local buildings_1 = {};
+local buildings_2 = {};
+local grounds = {};
+local invisibleObstacles = {};
+local visibleObstacles = {};
+
+local buildingGroup1; 
+local buildingGroup2;
+local groundGroup;
+local obstacleGroup;
+local invisibleObstacleGroup;
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -89,11 +135,11 @@ local obstacle_sequenceData = {
 -- local sheet = runningMan_sheet;
 -- local sequenceData = runningMan_sequenceData;
 
-local buildings_1 = {};
-local buildings_2 = {};
-local grounds = {};
-local invisibleObstacles = {};
-local visibleObstacles = {};
+-- local buildings_1 = {};
+-- local buildings_2 = {};
+-- local grounds = {};
+-- local invisibleObstacles = {};
+-- local visibleObstacles = {};
 local invisibleAlpha = 0.0;
 
 local pauseButton;
@@ -104,118 +150,67 @@ local quitButton;
  
 -- "scene:create()"
 function scene:create( event )
+   print("Scene 2 Create called")
+   print(display.contentCenterX)
  
    local sceneGroup = self.view
+
+   buildingGroup1 = display.newGroup( );
+   buildingGroup2 = display.newGroup( );
+   groundGroup = display.newGroup( );
+   obstacleGroup = display.newGroup( );
+   invisibleObstacleGroup = display.newGroup( );
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
 
    -- lavender background
-   background = display.newRect(sceneGroup, display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
+   background = display.newRect(  display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
    background:setFillColor(0.65, 0.5, 1)
+   sceneGroup:insert(background);
 
-   building1 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX - 500, display.contentCenterY * 0.6)
-   building1.xScale = 4;
-   building1.yScale = 4;
-   table.insert(buildings_1, building1);
-   building1_2 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX + 0, display.contentCenterY * 0.6)
-   building1_2.xScale = 4;
-   building1_2.yScale = 4;
-   table.insert(buildings_1, building1_2);
-   building1_3 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX + 500, display.contentCenterY * 0.6)
-   building1_3.xScale = 4;
-   building1_3.yScale = 4;
-   table.insert(buildings_1, building1_3);
-   building1_4 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX + 1000, display.contentCenterY * 0.6)
-   building1_4.xScale = 4;
-   building1_4.yScale = 4;
-   table.insert(buildings_1, building1_4);
+   local xOffset = -500;
+   for i = 1,4 do
+      local building = display.newImage(  "Resources/Background/bgg.png", display.contentCenterX + xOffset, display.contentCenterY * 0.6)
+      building:setFillColor(0.65, 0.5, 1)
+      -- sceneGroup:insert(building);
+      building.x = display.contentCenterX + xOffset;
+      building.y = display.contentCenterY * 0.6;
+      building.xScale = 4;
+      building.yScale = 4;
+      buildingGroup1:insert(building);
+      -- table.insert(buildings_1, building);
+      xOffset = xOffset + 500;
+   end
+   sceneGroup:insert(buildingGroup1);
 
-   building2 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX - 500, display.contentCenterY * 0.6)
-   building2.xScale = 4;
-   building2.yScale = 4;
-   table.insert(buildings_2, building2);
-   building2_2 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX + 0, display.contentCenterY * 0.6)
-   building2_2.xScale = 4;
-   building2_2.yScale = 4;
-   table.insert(buildings_2, building2_2);
-   building2_3 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX  + 500, display.contentCenterY * 0.6)
-   building2_3.xScale = 4;
-   building2_3.yScale = 4;
-   table.insert(buildings_2, building2_3);
-   building2_4 = display.newImage(sceneGroup, "Resources/Background/bgf.png", display.contentCenterX + 1000, display.contentCenterY * 0.6)
-   building2_4.xScale = 4;
-   building2_4.yScale = 4;
-   table.insert(buildings_2, building2_4);
+   xOffset = -500;
+   for i = 1,4 do
+      local building = display.newImage(  "Resources/Background/bgf.png", display.contentCenterX + xOffset, display.contentCenterY * 0.6)
+      building:setFillColor(0.65, 0.5, 1)
+      building.x = display.contentCenterX + xOffset;
+      building.y = display.contentCenterY * 0.6;
+      building.xScale = 4;
+      building.yScale = 4;
+      -- sceneGroup:insert(building);
+      buildingGroup2:insert(building);
+      -- table.insert(buildings_2, building);
+      xOffset = xOffset + 500;
+   end
+   sceneGroup:insert(buildingGroup2);
 
-   ground = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 800, display.contentHeight * 0.90);
-   ground.xScale = 4;
-   ground.yScale = 4;
-   table.insert(grounds, ground);
-   ground_2 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 700, display.contentHeight * 0.90);
-   ground_2.xScale = 4;
-   ground_2.yScale = 4;
-   table.insert(grounds, ground_2);
-   ground_3 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 600, display.contentHeight * 0.90);
-   ground_3.xScale = 4;
-   ground_3.yScale = 4;
-   table.insert(grounds, ground_3);
-   ground_4 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 500, display.contentHeight * 0.90);
-   ground_4.xScale = 4;
-   ground_4.yScale = 4;
-   table.insert(grounds, ground_4);
-   ground_5 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 400, display.contentHeight * 0.90);
-   ground_5.xScale = 4;
-   ground_5.yScale = 4;
-   table.insert(grounds, ground_5);
-   ground_6 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 300, display.contentHeight * 0.90);
-   ground_6.xScale = 4;
-   ground_6.yScale = 4;
-   table.insert(grounds, ground_6);
-   ground_7 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 200, display.contentHeight * 0.90);
-   ground_7.xScale = 4;
-   ground_7.yScale = 4;
-   table.insert(grounds, ground_7);
-   ground_8 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 100, display.contentHeight * 0.90);
-   ground_8.xScale = 4;
-   ground_8.yScale = 4;
-   table.insert(grounds, ground_8);
-   ground_9 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX, display.contentHeight * 0.90);
-   ground_9.xScale = 4;
-   ground_9.yScale = 4;
-   table.insert(grounds, ground_9);
-   ground_10 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 100, display.contentHeight * 0.90);
-   ground_10.xScale = 4;
-   ground_10.yScale = 4;
-   table.insert(grounds, ground_10);
-   ground_11 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 200, display.contentHeight * 0.90);
-   ground_11.xScale = 4;
-   ground_11.yScale = 4;
-   table.insert(grounds, ground_11);
-   ground_12 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 300, display.contentHeight * 0.90);
-   ground_12.xScale = 4;
-   ground_12.yScale = 4;
-   table.insert(grounds, ground_12);
-   ground_13 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 400, display.contentHeight * 0.90);
-   ground_13.xScale = 4;
-   ground_13.yScale = 4;
-   table.insert(grounds, ground_13);
-   ground_14 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 500, display.contentHeight * 0.90);
-   ground_14.xScale = 4;
-   ground_14.yScale = 4;
-   table.insert(grounds, ground_14);
-   ground_15 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 600, display.contentHeight * 0.90);
-   ground_15.xScale = 4;
-   ground_15.yScale = 4;
-   table.insert(grounds, ground_15);
-   ground_16 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 700, display.contentHeight * 0.90);
-   ground_16.xScale = 4;
-   ground_16.yScale = 4;
-   table.insert(grounds, ground_16);
-   ground_17 = display.newImage(sceneGroup, "Resources/Background/sprite13-sheet0.png", display.contentCenterX + 800, display.contentHeight * 0.90);
-   ground_17.xScale = 4;
-   ground_17.yScale = 4;
-   table.insert(grounds, ground_17);
+   xOffset = -800;
+   for i = 1,17 do
+      local ground = display.newImage(  "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 800, display.contentHeight * 0.90);
+      -- sceneGroup:insert(building);
+      ground.x = display.contentCenterX + xOffset;
+      ground.xScale = 4;
+      ground.yScale = 4;
+      groundGroup:insert(ground);
+      -- table.insert(grounds, ground);
+      xOffset = xOffset + 100;
+   end
+   sceneGroup:insert(groundGroup);
 
    runningMan = display.newSprite(runningMan_sheet, runningMan_sequenceData)
    runningMan.xScale = 0.4;
@@ -224,30 +219,61 @@ function scene:create( event )
    runningMan.y = display.contentCenterY * 1.19;
    sceneGroup:insert(runningMan);
 
-   drone = display.newSprite(drone_sheet, drone_sequenceData)
-   drone.xScale = 2;
-   drone.yScale = 2;
-   drone.x = display.contentCenterX;
-   drone.y = display.contentCenterY;
-   sceneGroup:insert(drone);
+   invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 60, 160);
+   invisiblePlayer:setFillColor(0, 0.5, 0);
+   invisiblePlayer.alpha = invisibleAlpha;
+   invisiblePlayer.yScale = 1;
+   invisiblePlayer.xScale = 1;
+   invisiblePlayer.myName = "Player";
+   sceneGroup:insert(invisiblePlayer);
 
-   obstacle1 = display.newSprite(obstacle_sheet, obstacle_sequenceData)
-   obstacle1.xScale = 3;
-   obstacle1.yScale = 3;
-   obstacle1.x = display.contentCenterX * 1.8;
-   obstacle1.y = display.contentCenterY * 1.25 + 20;
-   obstacle1.myName = "Danger";
-   sceneGroup:insert(obstacle1);
-   table.insert(visibleObstacles, obstacle1);
+   -- drone = display.newSprite(drone_sheet, drone_sequenceData)
+   -- drone.xScale = 2;
+   -- drone.yScale = 2;
+   -- drone.x = display.contentCenterX;
+   -- drone.y = display.contentCenterY;
+   -- sceneGroup:insert(drone);
 
-   invisibleObstacle1 = display.newRect(obstacle1.x, obstacle1.y, 80, 96);
-   invisibleObstacle1:setFillColor(0.5, 0, 0);
-   invisibleObstacle1.alpha = invisibleAlpha;
-   invisibleObstacle1.yScale = 1;
-   invisibleObstacle1.xScale = 1;
-   invisibleObstacle1.myName = "Danger";
-   sceneGroup:insert(invisibleObstacle1);
-   table.insert(invisibleObstacles, invisibleObstacle1);
+   xOffset = 1200
+   for i = 1, 1 do
+      local obstacle = display.newSprite(obstacle_sheet, obstacle_sequenceData)
+      obstacle.xScale = 3;
+      obstacle.yScale = 3;
+      obstacle.x = display.contentCenterX + xOffset;
+      obstacle.y = display.contentCenterY * 1.25 + 20;
+      obstacle:setSequence( "trash" )
+      obstacle.myName = "Danger";
+      obstacleGroup:insert( obstacle );
+
+      invisibleObstacle = display.newRect(obstacle.x, obstacle.y, 80, 96);
+      invisibleObstacle:setFillColor(0.5, 0, 0);
+      invisibleObstacle.alpha = invisibleAlpha;
+      invisibleObstacle.yScale = 1;
+      invisibleObstacle.xScale = 1;
+      invisibleObstacle.myName = "Danger";
+      invisibleObstacleGroup:insert( invisibleObstacle )
+         
+      -- xOffset = xOffset + 100;
+   end
+   sceneGroup:insert(groundGroup);
+
+   -- obstacle1 = display.newSprite(obstacle_sheet, obstacle_sequenceData)
+   -- obstacle1.xScale = 3;
+   -- obstacle1.yScale = 3;
+   -- obstacle1.x = display.contentCenterX * 1.8;
+   -- obstacle1.y = display.contentCenterY * 1.25 + 20;
+   -- obstacle1.myName = "Danger";
+   -- sceneGroup:insert(obstacle1);
+   -- table.insert(visibleObstacles, obstacle1);
+
+   -- invisibleObstacle1 = display.newRect(obstacle1.x, obstacle1.y, 80, 96);
+   -- invisibleObstacle1:setFillColor(0.5, 0, 0);
+   -- invisibleObstacle1.alpha = invisibleAlpha;
+   -- invisibleObstacle1.yScale = 1;
+   -- invisibleObstacle1.xScale = 1;
+   -- invisibleObstacle1.myName = "Danger";
+   -- sceneGroup:insert(invisibleObstacle1);
+   -- table.insert(invisibleObstacles, invisibleObstacle1);
 
    invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 20, display.contentWidth, 256);
    invisibleGroundPlatform:setFillColor(0, 0, 0.5);
@@ -257,13 +283,13 @@ function scene:create( event )
    invisibleGroundPlatform.myName = "Ground";
    sceneGroup:insert(invisibleGroundPlatform);
 
-   invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 60, 160);
-   invisiblePlayer:setFillColor(0, 0.5, 0);
-   invisiblePlayer.alpha = invisibleAlpha;
-   invisiblePlayer.yScale = 1;
-   invisiblePlayer.xScale = 1;
-   invisiblePlayer.myName = "Player";
-   sceneGroup:insert(invisiblePlayer);
+   -- invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 60, 160);
+   -- invisiblePlayer:setFillColor(0, 0.5, 0);
+   -- invisiblePlayer.alpha = invisibleAlpha;
+   -- invisiblePlayer.yScale = 1;
+   -- invisiblePlayer.xScale = 1;
+   -- invisiblePlayer.myName = "Player";
+   -- sceneGroup:insert(invisiblePlayer);
 
    scoreText = display.newText("0", 15, 30, native.systemFont, 40); 
    scoreText:setFillColor(1, 1, 1);
@@ -287,6 +313,7 @@ function scene:create( event )
          time = 100,
          params = {}
       });
+      composer.removeScene("scene2", true);
    end
 
 
@@ -371,7 +398,6 @@ function scene:create( event )
    pauseButton:setLabel( "PAUSE" );
    sceneGroup:insert(pauseButton);
 
-
    function userTap(event)
       if(event.x < 630 and event.x > 510 and event.y < 570) then
          return
@@ -434,11 +460,15 @@ function scene:show( event )
  
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      -- local currentScene = composer.getScene( "scene2" )
+      -- print("Current Scene = ");
+      -- print(currentScene)
+      -- composer.gotoScene( "scene2" );
       params = event.params
       runningMan:setSequence("running");
-      drone:setSequence("flying");
+      -- drone:setSequence("flying");
       
-      obstacle1:setSequence("trash");
+      -- obstacle1:setSequence("trash");
       physics.start();
       physics.setGravity (0, 9.8*2);
 
@@ -446,12 +476,16 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-      drone:play();
-      obstacle1:play();
+      -- drone:play();
+      -- obstacle1:play();
       -- runningMan:play();
       physics.addBody(invisiblePlayer, "dynamic", {bounce = 0});
       physics.addBody(invisibleGroundPlatform, "static", {bounce = 0});
-      physics.addBody(invisibleObstacle1, "static", {bounce = 0});
+      
+      for i = 1, invisibleObstacleGroup.numChildren do 
+         local child = invisibleObstacleGroup[i];
+         physics.addBody(child, "static", {bounce = 0});
+      end
 
       -- unpauses the game after re-entering
       pauseGameMethod(false);
@@ -461,31 +495,57 @@ function scene:show( event )
             local groundSpeed = 10;
             local building1Speed = 2;
             local building2Speed = 6;
-            for _, building in ipairs(buildings_1) do
-               building.x = building.x - building1Speed;
-               if(building.x < -512) then
-                  building.x = 1300;
+
+            for i = 1, buildingGroup1.numChildren do
+               local child = buildingGroup1[i]
+               child.x = child.x - building1Speed;
+               if(child.x < -512) then
+                  child.x = 1300;
                end
             end
-            for _, building in ipairs(buildings_2) do
-               building.x = building.x - building2Speed;
-               if(building.x < -512) then
-                  building.x = 1400;
+
+            for i = 1,buildingGroup2.numChildren do
+               local child = buildingGroup2[i]
+               child.x = child.x - building2Speed;
+               if(child.x < -512) then
+                  child.x = 1400;
                end
             end
-            for _, ground in ipairs(grounds) do
-               ground.x = ground.x - groundSpeed;
-               if(ground.x < -512) then
-                  ground.x = 1200;
+
+            if score > 3 then
+               for i = 1,obstacleGroup.numChildren do
+                  local child = obstacleGroup[i];
+                  local invisbleChild = invisibleObstacleGroup[i];
+                  child.x = child.x - groundSpeed;
+                  invisbleChild.x = invisbleChild.x - groundSpeed;
+                  if(child.x < -512) then
+                     child.x = math.random(1200, 1700);
+                     invisbleChild.x = child.x;
+
+                     local obstacleSelection = math.random(1 ,  9);
+                     if obstacleSelection == 1 then
+                        child:setSequence("trash");
+                     elseif obstacleSelection == 2 then 
+                        child:setSequence("cone");
+                     elseif obstacleSelection == 3 then 
+                        child:setSequence("mailBox");
+                     elseif obstacleSelection == 4 then 
+                        child:setSequence("fireHydrant");
+                     elseif obstacleSelection == 5 then 
+                        child:setSequence("pillar");
+                     elseif obstacleSelection == 6 then 
+                        child:setSequence("trafficLight");
+                     elseif obstacleSelection == 7 then 
+                        child:setSequence("stopSign");
+                     elseif obstacleSelection == 8 then 
+                        child:setSequence("tire");
+                     elseif obstacleSelection == 9 then 
+                        child:setSequence("fence");
+                     end
+                  end
                end
             end
-            for _, obstacle in ipairs(invisibleObstacles) do
-               obstacle.x = obstacle.x - groundSpeed;
-               if(obstacle.x < -512) then
-                  obstacle.x = 1200;
-               end
-               visibleObstacles[_].x = obstacle.x;
-            end
+
             runningMan.y = invisiblePlayer.y - 12;
 
          end
@@ -522,20 +582,28 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       runningMan:pause();
+      pauseGameMethod(true);
 
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
+      
       Runtime:removeEventListener("tap", userTap)
-      pauseGameMethod(true);
       -- invisiblePlayer:removeEventListener("collision")
    end
 end
  
 -- "scene:destroy()"
 function scene:destroy( event )
+   sceneGroup = self.view
 
-   local sceneGroup = self.view
-   -- sceneGroup.remove(runningMan);
+      buildingGroup1:removeSelf();
+      buildingGroup1 = nil;
+
+      buildingGroup2:removeSelf();
+      buildingGroup2 = nil;
+
+      groundGroup:removeSelf();
+      groundGroup = nil;
 
    -- Called prior to the removal of scene's view ("sceneGroup").
    -- Insert code here to clean up the scene.

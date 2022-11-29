@@ -30,6 +30,29 @@ local runningMan_sequenceData = {
    {name = "idle", frames = {1, 2}, time = 700, loopCount = 0}
 }
 
+-- Declare all objects
+local background;
+local building1;
+local building1_2;
+local building1_3;
+local building2;
+local building2_2;
+local building2_3;
+local ground;
+local ground_2;
+local ground_3;
+local ground_4;
+local ground_5;
+local ground_6;
+local ground_7;
+local ground_8;
+local ground_9;
+local ground_10;
+local ground_11;
+local ground_12;
+local ground_13;
+local runningMan;
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -197,10 +220,12 @@ function scene:create( event )
    sceneGroup:insert(button2);
 
    local function handleButton3Event (event)
+      local eogFlag = true;
+      local score = nil;
       composer.gotoScene("scene4", {
          effect = "slideUp",
          time = 100,
-         params = {}
+         params = {eogFlag, score}
       });
    end
 
@@ -237,11 +262,51 @@ function scene:show( event )
       params = event.params
       speed = 20;
       runningMan:setSequence("idle");
+
+      -- composer.removeScene("scene2")
+
+      -- local function handleButton1Event (event)
+      --    composer.gotoScene("scene2", {
+      --       effect = "slideUp",
+      --       time = 100,
+      --       params = {}
+      --    });
+      -- end
+
+      -- local button1 = widget.newButton( {
+      --    label = "button1",
+      --    onEvent = handleButton1Event,
+      --    emboss = false,
+      --    shape = "roundedRect",
+      --    width = 300,
+      --    height = 80,
+      --    cornerRadius = 2,
+      --    fillColor = { default = {0, 0, 1, 0.4}, over={}},
+      --    strokeColor = { default = {0, 0, 0, 0}, over={}},
+      --    strokeWidth = 0,
+      --    fontSize = 36,
+      --    labelColor = {default = {1, 1, 1, 1}, over={}}
+
+      -- });
+
+      -- button1.x = display.contentCenterX + 200;
+      -- button1.y = display.contentCenterY - 200;
+      -- button1:setLabel( "Start Game" );
+      -- sceneGroup:insert(button1);
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
+      -- composer.removeHidden(false);
+      -- composer.removeScene("scene2")
+      -- composer.loadScene("scene2");
       runningMan:play();
+      local currentScene = composer.getScene( "scene1" )
+      print("Current Scene = ");
+      print(currentScene)
+
+
    end
 end
  
