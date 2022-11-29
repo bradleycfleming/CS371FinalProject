@@ -202,7 +202,7 @@ function scene:create( event )
 
    xOffset = -800;
    for i = 1,17 do
-      local ground = display.newImage(  "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 800, display.contentHeight * 0.90);
+      local ground = display.newImage( "Resources/Background/sprite13-sheet0.png", display.contentCenterX - 800, display.contentHeight * 0.90);
       -- sceneGroup:insert(building);
       ground.x = display.contentCenterX + xOffset;
       ground.xScale = 4;
@@ -440,12 +440,29 @@ function scene:create( event )
       end
    end
 
+   local function gameOverListener(event) 
+      composer.gotoScene("scene3")
+      -- timerGameOver:pause( );
+   end
+
    function onCollision(self, event)
       if ( event.phase == "began" ) then
          -- running into obstacle
          if(event.other.myName == "Danger") then
             print("DANGER")
             pauseGameMethod(true);
+
+            local gameOver = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight);
+            gameOver:setFillColor(0, 0, 0, 0.225)
+            gameOver.alpha = 0.4;
+            sceneGroup:insert(gameOver);
+
+            timerGameOver = timer.performWithDelay( 4000, gameOverListener)
+
+            local gameOverText = display.newText("Game Over", display.contentCenterX, display.contentCenterY, native.systemFontBold, 44)
+            sceneGroup:insert(gameOverText);
+
+
          -- landing from a jump
          elseif(event.other.myName == "Ground") then
             currentJump = false;

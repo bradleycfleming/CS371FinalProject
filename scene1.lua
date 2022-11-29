@@ -190,11 +190,12 @@ function scene:create( event )
    sceneGroup:insert(button1);
 
    local function handleButton2Event (event)
+      local eogFlag = true;
+      local score = nil;
       composer.gotoScene("scene3", {
          effect = "slideUp",
          time = 100,
-         params = {
-      }
+         params = {eogFlag, score}
       });
    end
 
@@ -220,12 +221,10 @@ function scene:create( event )
    sceneGroup:insert(button2);
 
    local function handleButton3Event (event)
-      local eogFlag = true;
-      local score = nil;
       composer.gotoScene("scene4", {
          effect = "slideUp",
          time = 100,
-         params = {eogFlag, score}
+         params = {}
       });
    end
 
@@ -263,37 +262,6 @@ function scene:show( event )
       speed = 20;
       runningMan:setSequence("idle");
 
-      -- composer.removeScene("scene2")
-
-      -- local function handleButton1Event (event)
-      --    composer.gotoScene("scene2", {
-      --       effect = "slideUp",
-      --       time = 100,
-      --       params = {}
-      --    });
-      -- end
-
-      -- local button1 = widget.newButton( {
-      --    label = "button1",
-      --    onEvent = handleButton1Event,
-      --    emboss = false,
-      --    shape = "roundedRect",
-      --    width = 300,
-      --    height = 80,
-      --    cornerRadius = 2,
-      --    fillColor = { default = {0, 0, 1, 0.4}, over={}},
-      --    strokeColor = { default = {0, 0, 0, 0}, over={}},
-      --    strokeWidth = 0,
-      --    fontSize = 36,
-      --    labelColor = {default = {1, 1, 1, 1}, over={}}
-
-      -- });
-
-      -- button1.x = display.contentCenterX + 200;
-      -- button1.y = display.contentCenterY - 200;
-      -- button1:setLabel( "Start Game" );
-      -- sceneGroup:insert(button1);
-
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -302,10 +270,6 @@ function scene:show( event )
       -- composer.removeScene("scene2")
       -- composer.loadScene("scene2");
       runningMan:play();
-      local currentScene = composer.getScene( "scene1" )
-      print("Current Scene = ");
-      print(currentScene)
-
 
    end
 end
