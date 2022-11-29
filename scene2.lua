@@ -35,7 +35,6 @@ local ground_14;
 local ground_15;
 local ground_16;
 local ground_17;
-local runningMan;
 local drone;
 local obstacle1;
 local invisibleObstacle1;
@@ -53,6 +52,8 @@ local buildingGroup2;
 local groundGroup;
 local obstacleGroup;
 local invisibleObstacleGroup;
+
+local runningMan;
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -406,7 +407,9 @@ function scene:create( event )
          if(not pauseGame) then
             --left tap
             if(event.x < display.contentCenterX) then
-               runningMan:setSequence("crouch");
+               if(currentJump == false) then
+                  runningMan:setSequence("crouch");
+               end
             -- right tap
             else
                if(currentJump == false) then
@@ -416,6 +419,11 @@ function scene:create( event )
                end
             end
             runningMan:play()
+         end
+      elseif(event.phase == "ended" and event.x < display.contentCenterX) then
+         if(currentJump == false and not pauseGame) then
+            runningMan:setSequence("running");
+            runningMan:play();
          end
       end
    end
@@ -512,6 +520,14 @@ function scene:show( event )
                end
             end
 
+            for i = 1, groundGroup.numChildren do
+               local child = groundGroup[i]
+               child.x = child.x - groundSpeed;
+               if(child.x < -512) then
+                  child.x = 1200;
+               end
+            end
+
             if score > 3 then
                for i = 1,obstacleGroup.numChildren do
                   local child = obstacleGroup[i];
@@ -587,7 +603,7 @@ function scene:hide( event )
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       
-      Runtime:removeEventListener("tap", userTap)
+      Runtime:removeEventListener("touch", userTap)
       -- invisiblePlayer:removeEventListener("collision")
    end
 end
