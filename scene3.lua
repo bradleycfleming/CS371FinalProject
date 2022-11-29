@@ -43,7 +43,7 @@ function scene:create( event )
 
    -- Create Leaderboard File
    
-   csvFile = csv.open(system.pathForFile("leaderboard.csv"), {separator = ",", header = false});
+   csvFile = csv.open(system.pathForFile("leaderboard.csv"), {separator = ",", header = true});
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -57,11 +57,48 @@ function scene:show( event )
  
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
+      params = event.params;
+
+      -- Print Stats to Screen
+      if (params.eogFlag == false) then
+
+
+      end
+
+
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
+      local function onUsername( event )
+         if ( "began" == event.phase ) then
+              -- This is the "keyboard appearing" event.
+              -- In some cases you may want to adjust the interface while the keyboard is open.
+              -- native.setKeyboardFocus(usernameField);
+              print("Textbox Ready");
+         elseif ( "submitted" == event.phase ) then
+         
+            native.setKeyboardFocus(nil)
+            print("Text Submitted");
+            sceneGroup:remove(usernameField);
+          end
+
+      end
+
+      -- if (params.eogFlag == true) then
+
+      usernameField = native.newTextField( display.contentCenterX, display.contentCenterY, 220, 36 )
+      native.setKeyboardFocus(usernameField);
+      usernameField.font = native.newFont( native.systemFontBold, 24 )
+      usernameField.text = ""
+      usernameField:setTextColor( 0.4, 0.4, 0.8 )
+      usernameField:addEventListener( "userInput", onUsername )
+
+      sceneGroup:insert(usernameField);
+
+   -- end
+
    end
 end
  
@@ -84,6 +121,7 @@ end
 function scene:destroy( event )
  
    local sceneGroup = self.view
+   csvFile:close("leaderboard.csv");
  
    -- Called prior to the removal of scene's view ("sceneGroup").
    -- Insert code here to clean up the scene.
