@@ -299,9 +299,12 @@ function scene:show( event )
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
       -- composer.removeHidden(false);
-      composer.removeScene("scene2")
-      composer.loadScene("scene2");
+      -- composer.removeScene("scene2")
+      -- composer.loadScene("scene2");
       runningMan:play();
+      local currentScene = composer.getScene( "scene1" )
+      print("Current Scene = ");
+      print(currentScene)
 
 
    end
