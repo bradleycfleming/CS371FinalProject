@@ -256,7 +256,8 @@ function scene:create( event )
          
       -- xOffset = xOffset + 100;
    end
-   sceneGroup:insert(groundGroup);
+   sceneGroup:insert(obstacleGroup);
+   sceneGroup:insert(invisibleObstacleGroup);
 
    -- obstacle1 = display.newSprite(obstacle_sheet, obstacle_sequenceData)
    -- obstacle1.xScale = 3;
