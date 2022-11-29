@@ -6,7 +6,8 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local physics = require("physics");
- 
+local widget = require( "widget" ); 
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -88,13 +89,17 @@ local obstacle_sequenceData = {
 -- local sheet = runningMan_sheet;
 -- local sequenceData = runningMan_sequenceData;
 
-local speed;
 local buildings_1 = {};
 local buildings_2 = {};
 local grounds = {};
 local invisibleObstacles = {};
 local visibleObstacles = {};
-local invisibleAlpha = 0.3;
+local invisibleAlpha = 0.0;
+
+local pauseButton;
+local pauseMenu;
+local resumeButton;
+local quitButton;
 ---------------------------------------------------------------------------------
  
 -- "scene:create()"
@@ -244,14 +249,6 @@ function scene:create( event )
    sceneGroup:insert(invisibleObstacle1);
    table.insert(invisibleObstacles, invisibleObstacle1);
 
-
-   local buttonBack = display.newRect(display.contentCenterX,50,100,50);
-   sceneGroup:insert(buttonBack);
-   backText = display.newText("PAUSE", display.contentCenterX, 50, native.systemFont, 20)
-   backText:setFillColor(0, 0, 0);
-   buttonBack.myName = "PAUSE";
-   sceneGroup:insert(backText);
-
    invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 20, display.contentWidth, 256);
    invisibleGroundPlatform:setFillColor(0, 0, 0.5);
    invisibleGroundPlatform.alpha = invisibleAlpha;
@@ -285,15 +282,94 @@ function scene:create( event )
    }
 
    local function back (event)
+      composer.gotoScene("scene1", {
+         effect = "slideUp",
+         time = 100,
+         params = {}
+      });
+   end
+
+
+   local function pause (event)
       print("hello")
       -- composer.gotoScene("scene1", options);
       if(event.phase == "began") then
-
          pauseGameMethod(not pauseGame);
+         if(pauseGame) then
+
+            -- create game paused menu
+            pauseMenu = display.newRect(display.contentCenterX, display.contentCenterY * 0.8, display.contentWidth/3, display.contentHeight/2);
+            pauseMenu:setFillColor(0, 0, 1)
+            pauseMenu.alpha = 0.4;
+            sceneGroup:insert(pauseMenu);
+
+             resumeButton = widget.newButton( {
+               label = "button2",
+               onEvent = pause,
+               emboss = false,
+               shape = "roundedRect",
+               width = 300,
+               height = 80,
+               cornerRadius = 2,
+               fillColor = { default = {1, 1, 1, 0.8}, over={}},
+               strokeColor = { default = {0, 0, 0, 0}, over={}},
+               strokeWidth = 0,
+               fontSize = 20,
+               labelColor = {default = {0, 0, 0, 1}, over={}}
+            });
+            resumeButton.x = display.contentCenterX;
+            resumeButton.y = display.contentCenterY * 0.8 - 50;
+            resumeButton:setLabel( "RESUME" );
+            sceneGroup:insert(resumeButton);
+
+            quitButton = widget.newButton( {
+               label = "button3",
+               onEvent = back,
+               emboss = false,
+               shape = "roundedRect",
+               width = 300,
+               height = 80,
+               cornerRadius = 2,
+               fillColor = { default = {1, 1, 1, 0.8}, over={}},
+               strokeColor = { default = {0, 0, 0, 0}, over={}},
+               strokeWidth = 0,
+               fontSize = 20,
+               labelColor = {default = {0, 0, 0, 1}, over={}}
+         
+            });
+            quitButton.x = display.contentCenterX;
+            quitButton.y = display.contentCenterY * 0.8 + 50;
+            quitButton:setLabel("QUIT");
+            sceneGroup:insert(quitButton);
+         else
+            display.remove(pauseMenu);
+            resumeButton:removeSelf();
+            quitButton:removeSelf();
+         end
       end
    end
 
-   buttonBack:addEventListener("touch", back);
+
+   pauseButton = widget.newButton( {
+      label = "button1",
+      onEvent = pause,
+      emboss = false,
+      shape = "roundedRect",
+      width = 100,
+      height = 50,
+      cornerRadius = 2,
+      fillColor = { default = {0, 0, 1, 0.4}, over={}},
+      strokeColor = { default = {0, 0, 0, 0}, over={}},
+      strokeWidth = 0,
+      fontSize = 20,
+      labelColor = {default = {1, 1, 1, 1}, over={}}
+
+   });
+
+   pauseButton.x = display.contentCenterX;
+   pauseButton.y = 50;
+   pauseButton:setLabel( "PAUSE" );
+   sceneGroup:insert(pauseButton);
 
 
    function userTap(event)
@@ -359,7 +435,6 @@ function scene:show( event )
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       params = event.params
-      speed = 20;
       runningMan:setSequence("running");
       drone:setSequence("flying");
       
