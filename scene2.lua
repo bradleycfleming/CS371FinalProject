@@ -522,11 +522,12 @@ function scene:hide( event )
       -- Insert code here to "pause" the scene.
       -- Example: stop timers, stop animation, stop audio, etc.
       runningMan:pause();
+      pauseGameMethod(true);
 
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
       Runtime:removeEventListener("tap", userTap)
-      pauseGameMethod(true);
+      -- pauseGameMethod(true);
       -- invisiblePlayer:removeEventListener("collision")
    end
 end
