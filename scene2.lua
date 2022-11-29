@@ -6,6 +6,47 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local physics = require("physics");
+
+
+local background;
+local building1;
+local building1_2;
+local building1_3;
+local building1_4;
+local building2;
+local building2_2;
+local building2_3;
+local building2_4;
+local ground;
+local ground_2;
+local ground_3;
+local ground_4;
+local ground_5;
+local ground_6;
+local ground_7;
+local ground_8;
+local ground_9;
+local ground_10;
+local ground_11;
+local ground_12;
+local ground_13;
+local ground_14;
+local ground_15;
+local ground_16;
+local ground_17;
+local runningMan;
+local drone;
+local obstacle1;
+local invisibleObstacle1;
+local invisibleGroundPlatform;
+local invisiblePlayer;
+
+local buildings_1 = {};
+local buildings_2 = {};
+local grounds = {};
+local invisibleObstacles = {};
+local visibleObstacles = {};
+
 local widget = require( "widget" ); 
 
 ---------------------------------------------------------------------------------
@@ -89,11 +130,11 @@ local obstacle_sequenceData = {
 -- local sheet = runningMan_sheet;
 -- local sequenceData = runningMan_sequenceData;
 
-local buildings_1 = {};
-local buildings_2 = {};
-local grounds = {};
-local invisibleObstacles = {};
-local visibleObstacles = {};
+-- local buildings_1 = {};
+-- local buildings_2 = {};
+-- local grounds = {};
+-- local invisibleObstacles = {};
+-- local visibleObstacles = {};
 local invisibleAlpha = 0.0;
 
 local pauseButton;
@@ -104,6 +145,8 @@ local quitButton;
  
 -- "scene:create()"
 function scene:create( event )
+   print("Scene 2 Create called")
+   print(display.contentCenterX)
  
    local sceneGroup = self.view
  
@@ -115,6 +158,8 @@ function scene:create( event )
    background:setFillColor(0.65, 0.5, 1)
 
    building1 = display.newImage(sceneGroup, "Resources/Background/bgg.png", display.contentCenterX - 500, display.contentCenterY * 0.6)
+   -- building1.x = display.contentCenterX - 500;
+   -- building1.y = display.contentCenterY * 0.6;
    building1.xScale = 4;
    building1.yScale = 4;
    table.insert(buildings_1, building1);
@@ -216,6 +261,15 @@ function scene:create( event )
    ground_17.xScale = 4;
    ground_17.yScale = 4;
    table.insert(grounds, ground_17);
+
+   -- for i in building_1 do
+   --    sceneGroup:insert([i], buildings_1);
+   -- end
+   -- sceneGroup:insert(buildings_1);
+   -- sceneGroup:insert(buildings_2);
+   -- sceneGroup:insert(grounds);
+   -- sceneGroup:insert(invisibleObstacles);
+   -- sceneGroup:insert(visibleObstacles);
 
    runningMan = display.newSprite(runningMan_sheet, runningMan_sequenceData)
    runningMan.xScale = 0.4;
@@ -371,7 +425,6 @@ function scene:create( event )
    pauseButton:setLabel( "PAUSE" );
    sceneGroup:insert(pauseButton);
 
-
    function userTap(event)
       if(event.x < 630 and event.x > 510 and event.y < 570) then
          return
@@ -462,6 +515,8 @@ function scene:show( event )
             local building1Speed = 2;
             local building2Speed = 6;
             for _, building in ipairs(buildings_1) do
+               print(building);
+               print(building.x)
                building.x = building.x - building1Speed;
                if(building.x < -512) then
                   building.x = 1300;
@@ -535,7 +590,14 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-   local sceneGroup = self.view
+   buildings_1 = nil;
+   buildings_2 = nil;
+   grounds = nil;
+   invisibleObstacles = nil;
+   visibleObstacles = nil;
+   
+   sceneGroup = self.view
+
    -- sceneGroup.remove(runningMan);
 
    -- Called prior to the removal of scene's view ("sceneGroup").
