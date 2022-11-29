@@ -35,7 +35,7 @@ function scene:create( event )
    }
 
    local function back (event)
-      print("Back button pressed - going to scene 1");
+      print("Back button pressed - going to scene 1")
       composer.gotoScene("scene1", options);
    end
 
@@ -43,7 +43,7 @@ function scene:create( event )
 
    -- Create Leaderboard File
    
-   csvFile = csv.open(system.pathForFile("leaderboard.csv"), {separator = ",", header = true});
+   csvFile = csv.open(system.pathForFile("leaderboard.csv"), {separator = ",", header = false});
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.

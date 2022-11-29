@@ -30,6 +30,29 @@ local runningMan_sequenceData = {
    {name = "idle", frames = {1, 2}, time = 700, loopCount = 0}
 }
 
+-- Declare all objects
+local background;
+local building1;
+local building1_2;
+local building1_3;
+local building2;
+local building2_2;
+local building2_3;
+local ground;
+local ground_2;
+local ground_3;
+local ground_4;
+local ground_5;
+local ground_6;
+local ground_7;
+local ground_8;
+local ground_9;
+local ground_10;
+local ground_11;
+local ground_12;
+local ground_13;
+local runningMan;
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -167,11 +190,12 @@ function scene:create( event )
    sceneGroup:insert(button1);
 
    local function handleButton2Event (event)
+      local eogFlag = true;
+      local score = nil;
       composer.gotoScene("scene3", {
          effect = "slideUp",
          time = 100,
-         params = {
-      }
+         params = {eogFlag, score}
       });
    end
 
@@ -237,11 +261,16 @@ function scene:show( event )
       params = event.params
       speed = 20;
       runningMan:setSequence("idle");
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
+      -- composer.removeHidden(false);
+      -- composer.removeScene("scene2")
+      -- composer.loadScene("scene2");
       runningMan:play();
+
    end
 end
  
