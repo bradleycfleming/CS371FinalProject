@@ -173,7 +173,7 @@ function scene:create( event )
    local xOffset = -500;
    for i = 1,4 do
       local building = display.newImage(  "Resources/Background/bgg.png", display.contentCenterX + xOffset, display.contentCenterY * 0.6)
-      building:setFillColor(0.65, 0.5, 1)
+      -- building:setFillColor(0.65, 0.5, 1)
       -- sceneGroup:insert(building);
       building.x = display.contentCenterX + xOffset;
       building.y = display.contentCenterY * 0.6;
@@ -188,7 +188,7 @@ function scene:create( event )
    xOffset = -500;
    for i = 1,4 do
       local building = display.newImage(  "Resources/Background/bgf.png", display.contentCenterX + xOffset, display.contentCenterY * 0.6)
-      building:setFillColor(0.65, 0.5, 1)
+      -- building:setFillColor(0.65, 0.5, 1)
       building.x = display.contentCenterX + xOffset;
       building.y = display.contentCenterY * 0.6;
       building.xScale = 4;
@@ -301,6 +301,7 @@ function scene:create( event )
 
 
    currentJump = false;
+   currentCrouch = false;
    pauseGame = false;
    score = 0;
 
@@ -408,23 +409,33 @@ function scene:create( event )
          if(not pauseGame) then
             --left tap
             if(event.x < display.contentCenterX) then
-               if(currentJump == false) then
+               if(currentJump == false and currentCrouch == false) then
+                  print("crouch started")
                   runningMan:setSequence("crouch");
+                  currentCrouch = true;
+                  physics.removeBody(invisiblePlayer);
+                  invisiblePlayer.height = invisiblePlayer.height - 35;
+                  physics.addBody(invisiblePlayer, "dynamic", {bounce = 0});
                end
             -- right tap
             else
                if(currentJump == false) then
                   runningMan:setSequence("jump");
-                  invisiblePlayer:applyLinearImpulse(0, -2, invisiblePlayer.x, invisiblePlayer.y);
+                  invisiblePlayer:applyLinearImpulse(0, -2, invisiblePlayer.x, invisiblePlayer.y); 
                   currentJump = true;
                end
             end
             runningMan:play()
          end
       elseif(event.phase == "ended" and event.x < display.contentCenterX) then
-         if(currentJump == false and not pauseGame) then
+         if(currentJump == false and not pauseGame and currentCrouch == true) then
+            print("crouch ended")
             runningMan:setSequence("running");
             runningMan:play();
+            currentCrouch = false;
+            physics.removeBody(invisiblePlayer);
+            invisiblePlayer.height = invisiblePlayer.height + 35;
+            physics.addBody(invisiblePlayer, "dynamic", {bounce = 0});
          end
       end
    end
@@ -447,7 +458,7 @@ function scene:create( event )
             print("DANGER")
             pauseGameMethod(true);
          -- landing from a jump
-         elseif(event.other.myName == "Ground") then
+         elseif(event.other.myName == "Ground" and currentJump) then
             currentJump = false;
             runningMan:setSequence("running");
             runningMan:play();
@@ -563,7 +574,15 @@ function scene:show( event )
                end
             end
 
-            runningMan.y = invisiblePlayer.y - 12;
+            invisiblePlayer.rotation = 0;
+            if(currentCrouch) then
+               invisiblePlayer.x = display.contentCenterX * 0.4 + 40;
+               invisiblePlayer.y = display.contentCenterY * 1.19 + 23;
+            else
+               runningMan.y = invisiblePlayer.y - 12;
+               invisiblePlayer.x = display.contentCenterX * 0.4 + 20;
+               -- invisiblePlayer.y = display.contentCenterY * 1.19;
+            end
 
          end
       end
