@@ -247,6 +247,10 @@ function scene:create( event )
 
    local buttonBack = display.newRect(display.contentCenterX,50,100,50);
    sceneGroup:insert(buttonBack);
+   backText = display.newText("PAUSE", display.contentCenterX, 50, native.systemFont, 20)
+   backText:setFillColor(0, 0, 0);
+   buttonBack.myName = "PAUSE";
+   sceneGroup:insert(backText);
 
    invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 20, display.contentWidth, 256);
    invisibleGroundPlatform:setFillColor(0, 0, 0.5);
@@ -256,7 +260,7 @@ function scene:create( event )
    invisibleGroundPlatform.myName = "Ground";
    sceneGroup:insert(invisibleGroundPlatform);
 
-   invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 100, 160);
+   invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 60, 160);
    invisiblePlayer:setFillColor(0, 0.5, 0);
    invisiblePlayer.alpha = invisibleAlpha;
    invisiblePlayer.yScale = 1;
@@ -264,10 +268,16 @@ function scene:create( event )
    invisiblePlayer.myName = "Player";
    sceneGroup:insert(invisiblePlayer);
 
+   scoreText = display.newText("0", 15, 30, native.systemFont, 40); 
+   scoreText:setFillColor(1, 1, 1);
+   scoreText.anchorX = 0;
+   sceneGroup:insert(scoreText);
+
 
 
    currentJump = false;
    pauseGame = false;
+   score = 0;
 
    local options = {
       effect = "slideDown",
@@ -276,26 +286,35 @@ function scene:create( event )
 
    local function back (event)
       print("hello")
-      composer.gotoScene("scene1", options);
+      -- composer.gotoScene("scene1", options);
+      if(event.phase == "began") then
+
+         pauseGameMethod(not pauseGame);
+      end
    end
 
-   buttonBack:addEventListener("tap", back);
+   buttonBack:addEventListener("touch", back);
 
 
    function userTap(event)
-      if(not pauseGame) then
-         --left tap
-         if(event.x < display.contentCenterX) then
-            runningMan:setSequence("crouch");
-         -- right tap
-         else
-            if(currentJump == false) then
-               runningMan:setSequence("jump");
-               invisiblePlayer:applyLinearImpulse(0, -3, invisiblePlayer.x, invisiblePlayer.y);
-               currentJump = true;
+      if(event.x < 630 and event.x > 510 and event.y < 570) then
+         return
+      end 
+      if(event.phase == "began") then
+         if(not pauseGame) then
+            --left tap
+            if(event.x < display.contentCenterX) then
+               runningMan:setSequence("crouch");
+            -- right tap
+            else
+               if(currentJump == false) then
+                  runningMan:setSequence("jump");
+                  invisiblePlayer:applyLinearImpulse(0, -2, invisiblePlayer.x, invisiblePlayer.y);
+                  currentJump = true;
+               end
             end
+            runningMan:play()
          end
-         runningMan:play()
       end
    end
 
@@ -397,12 +416,21 @@ function scene:show( event )
          end
       end
 
+      local function increaseScore()
+         if(not pauseGame) then
+            score = score + 1;
+            scoreText.text = score
+         end
+         print(score)
+      end
+
       -- if statement prevents the game from performing moveBackground multiple times after opening scene2 multiple times
       if(timer1 == nil) then
          timer1 = timer.performWithDelay(33.333, moveBackground, 0)
+         timer2 = timer.performWithDelay(1000, increaseScore, 0);
       end
       
-      Runtime:addEventListener("tap", userTap)
+      Runtime:addEventListener("touch", userTap)
       invisiblePlayer.collision = onCollision
       invisiblePlayer:addEventListener("collision")
    end
