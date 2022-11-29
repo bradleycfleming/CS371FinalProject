@@ -265,7 +265,7 @@ function scene:create( event )
    -- for i in building_1 do
    --    sceneGroup:insert([i], buildings_1);
    -- end
-   -- sceneGroup:insert(buildings_1);
+   sceneGroup:insert(buildings_1);
    -- sceneGroup:insert(buildings_2);
    -- sceneGroup:insert(grounds);
    -- sceneGroup:insert(invisibleObstacles);
