@@ -484,8 +484,12 @@ function scene:create( event )
    end
 
    local function gameOverListener(event) 
-      composer.gotoScene("scene3")
-      -- timerGameOver:pause( );
+      composer.gotoScene("scene3", {
+         effect = "slideUp",
+         time = 100,
+         params = {}
+      });
+      composer.removeScene("scene2", true);
    end
 
    function onCollision(self, event)
