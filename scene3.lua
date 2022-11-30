@@ -201,19 +201,17 @@ function scene:show( event )
 
               -- print("Textbox Ready");
          elseif ( "submitted" == event.phase ) then
-            params.eogFlag = false;
-            -- csvFile:write(usernameField.text .. ", " .. params.finalScore)
+            -- params.eogFlag = false;
+            
             file:write("\n" .. usernameField.text .. ", " .. params.finalScore)
             print("Text Submitted");
             print(usernameField.text);
             native.setKeyboardFocus(nil)
-            sceneGroup:remove( textBoxGroup )
-            textBoxGroup:removeSelf( );
-            textBoxGroup = nil;
-            usernameField:removeSelf( );
-            usernameField = nil;
-            file:close();
+            sceneGroup:remove( usernameField )
+            -- usernameField:removeSelf( );
 
+            file:close();
+            params.eogFlag = false;
             composer.gotoScene("scene3", {
                effect = "slideUp",
                time = 100,
@@ -221,6 +219,15 @@ function scene:show( event )
             });
           end
 
+         if params.eogFlag == false then 
+            usernameField:removeSelf( );
+         end
+
+         --  composer.gotoScene("scene3", {
+         --    effect = "slideUp",
+         --    time = 100,
+         --    params = {eogFlag = false, finalScore = 0}
+         -- });
       end
 
       if params.eogFlag == true then
@@ -234,10 +241,12 @@ function scene:show( event )
             usernameField.text = ""
             usernameField:setTextColor( 0.4, 0.4, 0.8 )
             usernameField:addEventListener( "userInput", onUsername )
-            textBoxGroup:insert(usernameField);
-            sceneGroup:insert( textBoxGroup );
+            -- textBoxGroup:insert(usernameField);
+            sceneGroup:insert( usernameField );
          end
       end
+
+
    end
 end
  

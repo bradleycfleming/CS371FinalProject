@@ -66,6 +66,8 @@ local runningMan;
 function scene:create( event )
  
    local sceneGroup = self.view
+
+   local audioSong = audio.loadStream( "scifi.mp3" );
  
    background = display.newRect(sceneGroup, display.contentCenterX - 50 , display.contentCenterY, display.contentWidth + 400, display.contentHeight) 
    background:setFillColor(0.65, 0.5, 1)
@@ -261,6 +263,8 @@ function scene:show( event )
       params = event.params
       speed = 20;
       runningMan:setSequence("idle");
+
+      local backgroundmusic = audio.play(audioSong, {loops=-1})
 
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.

@@ -107,7 +107,7 @@ local obstacle_opt = {
 
 -- Setup File Path to Resources
 -- local docs_path = system.pathForFile( "", system.ResourceDirectory)
-
+-- local audioSong = audio.loadStream( "scifi.mp3" )
 
 local runningMan_sheet = graphics.newImageSheet("Resources/Sprite/spritesheet.png", runningMan_opt)
 
@@ -548,6 +548,9 @@ function scene:show( event )
       physics.start();
       physics.setGravity (0, 9.8*2);
 
+      -- local backgroundmusic = audio.play(audioSong)
+      -- sceneGroup:insert(backgroundmusic);
+
    elseif ( phase == "did" ) then
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
@@ -716,8 +719,8 @@ end
 function scene:destroy( event )
    sceneGroup = self.view
 
-      timer.pause(timer1);
-      timer.pause(timer2);
+      -- timer.pause(timer1);
+      -- timer.pause(timer2);
 
       buildingGroup1:removeSelf();
       buildingGroup1 = nil;
