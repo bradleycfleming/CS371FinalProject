@@ -190,12 +190,12 @@ function scene:create( event )
    sceneGroup:insert(button1);
 
    local function handleButton2Event (event)
-      local eogFlag = true;
+      -- local eogFlag = false;
       local score = nil;
       composer.gotoScene("scene3", {
          effect = "slideUp",
          time = 100,
-         params = {eogFlag, score}
+         params = {eogFlag = false, finalScore = 0}
       });
    end
 

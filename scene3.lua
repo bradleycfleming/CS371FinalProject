@@ -16,7 +16,84 @@ local csvFile = "";
 -- local forward references should go here
  
 ---------------------------------------------------------------------------------
+function doesFileExist( fname, path )
  
+    local results = false
+ 
+    -- Path for the file
+    local filePath = system.pathForFile( fname, path )
+ 
+    if ( filePath ) then
+        local file, errorString = io.open( filePath, "r" )
+ 
+        if not file then
+            -- Error occurred; output the cause
+            print( "File error: " .. errorString )
+        else
+            -- File exists!
+            print( "File found: " .. fname )
+            results = true
+            -- Close the file handle
+            file:close()
+        end
+    end
+ 
+    return results
+end
+
+function copyFile( srcName, srcPath, dstName, dstPath, overwrite )
+ 
+    local results = false
+ 
+    local fileExists = doesFileExist( srcName, srcPath )
+    if ( fileExists == false ) then
+        return nil  -- nil = Source file not found
+    end
+ 
+    -- Check to see if destination file already exists
+    if not ( overwrite ) then
+         local destfileExists = doesFileExist( dstName, dstPath )
+        if ( destfileExists == true ) then
+            return 1  -- 1 = File already exists (don't overwrite)
+        end
+    end
+ 
+    -- Copy the source file to the destination file
+    local rFilePath = system.pathForFile( srcName, srcPath )
+    local wFilePath = system.pathForFile( dstName, dstPath )
+ 
+    local rfh = io.open( rFilePath, "rb" )
+    local wfh, errorString = io.open( wFilePath, "wb" )
+ 
+    if not ( wfh ) then
+        -- Error occurred; output the cause
+        print( "File error: " .. errorString )
+        return false
+    else
+        -- Read the file and write to the destination directory
+        local data = rfh:read( "*a" )
+        if not ( data ) then
+            print( "Read error!" )
+            return false
+        else
+            if not ( wfh:write( data ) ) then
+                print( "Write error!" )
+                return false
+            end
+        end
+    end
+ 
+    results = 2  -- 2 = File copied successfully!
+ 
+    -- Close file handles
+    rfh:close()
+    wfh:close()
+ 
+    return results
+end
+
+
+
 -- "scene:create()"
 function scene:create( event )
  
@@ -42,8 +119,9 @@ function scene:create( event )
    buttonBack:addEventListener("tap", back);
 
    -- Create Leaderboard File
-   
-   csvFile = csv.open(system.pathForFile("leaderboard.csv"), {separator = ",", header = false});
+   copyFile("leaderboard.csv", nil, "leaderboard.csv", system.DocumentsDirectory, false);
+   csvFilePath = system.pathForFile("leaderboard.csv", system.DocumentsDirectory);
+   csvFile = csv.open(csvFilePath, {separator = ",", header = true});
  
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -54,16 +132,35 @@ function scene:show( event )
  
    local sceneGroup = self.view
    local phase = event.phase
+
+   -- local csvData = {};
+   --    local function displayScore()
+   --       local yOffset = 0;
+   --       -- if csvData ~= nil then
+   --       --    for i in csvData do
+   --       --       local currentRecord = "test val"--record.name .. "   =   " .. record.score;
+   --       --       local scoreEntry = display.newText(currentRecord, display.contentCenterX, display.contentCenterY + yOffset, system.nativeFont, 24)
+   --       --       sceneGroup:insert(scoreEntry);
+   --       --       yOffset = yOffset + 30;
+   --       --    end
+   --       -- end
+   --    end
  
    if ( phase == "will" ) then
       -- Called when the scene is still off screen (but is about to come on screen).
       params = event.params;
 
+      -- for record in csvFile:lines( ) do
+      --    print("Record = ");
+      --    print(record.name .. record.score);
+      --    -- table.insert(csvData, currentRecord);
+      -- end
+
       -- Print Stats to Screen
-      if (params.eogFlag == false) then
-
-
-      end
+      -- if (params.eogFlag == false) then
+      --    print("Attempt to call displayScore() function")
+      --    displayScore()
+      -- end
 
 
 
@@ -71,34 +168,76 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
+      params = event.params;
+      -- print("Scene 3 On Screen: eogFlag = ")
+      -- print(params.eogFlag)
+      -- print("Score = " .. params.finalScore)
+
+      local yOffset = 0;
+      local maxScore = 0;
+      local usernameField;
+      for record in csvFile:lines( ) do
+         print(record.name)
+         print(record.score)
+         local currentScore = tonumber(record.score);
+         if currentScore > maxScore then
+            maxScore = currentScore;
+         end
+      
+         local currentRecord = record.name .. "   =   " .. record.score;
+         local scoreEntry = display.newText(currentRecord, display.contentCenterX, display.contentCenterY + yOffset, system.nativeFont, 24)
+         sceneGroup:insert(scoreEntry);
+         yOffset = yOffset + 30;
+      end
+
+      local file = io.open(csvFilePath, "a");
+      local textBoxGroup = display.newGroup( );
+
       local function onUsername( event )
          if ( "began" == event.phase ) then
               -- This is the "keyboard appearing" event.
               -- In some cases you may want to adjust the interface while the keyboard is open.
               -- native.setKeyboardFocus(usernameField);
-              print("Textbox Ready");
+
+              -- print("Textbox Ready");
          elseif ( "submitted" == event.phase ) then
-         
-            native.setKeyboardFocus(nil)
+            params.eogFlag = false;
+            -- csvFile:write(usernameField.text .. ", " .. params.finalScore)
+            file:write("\n" .. usernameField.text .. ", " .. params.finalScore)
             print("Text Submitted");
-            sceneGroup:remove(usernameField);
+            print(usernameField.text);
+            native.setKeyboardFocus(nil)
+            sceneGroup:remove( textBoxGroup )
+            textBoxGroup:removeSelf( );
+            textBoxGroup = nil;
+            usernameField:removeSelf( );
+            usernameField = nil;
+            file:close();
+
+            composer.gotoScene("scene3", {
+               effect = "slideUp",
+               time = 100,
+               params = {eogFlag = false, finalScore = 0}
+            });
           end
 
       end
 
-      -- if (params.eogFlag == true) then
-
-      usernameField = native.newTextField( display.contentCenterX, display.contentCenterY, 220, 36 )
-      native.setKeyboardFocus(usernameField);
-      usernameField.font = native.newFont( native.systemFontBold, 24 )
-      usernameField.text = ""
-      usernameField:setTextColor( 0.4, 0.4, 0.8 )
-      usernameField:addEventListener( "userInput", onUsername )
-
-      sceneGroup:insert(usernameField);
-
-   -- end
-
+      if params.eogFlag == true then
+         print("EOG Flag True")
+         local finalScore = tonumber( params.finalScore )
+         if finalScore > maxScore then
+            print("New High Score")
+            usernameField = native.newTextField( display.contentCenterX, display.contentCenterY -100, 220, 36 )
+            native.setKeyboardFocus(usernameField);
+            usernameField.font = native.newFont( native.systemFontBold, 24 )
+            usernameField.text = ""
+            usernameField:setTextColor( 0.4, 0.4, 0.8 )
+            usernameField:addEventListener( "userInput", onUsername )
+            textBoxGroup:insert(usernameField);
+            sceneGroup:insert( textBoxGroup );
+         end
+      end
    end
 end
  

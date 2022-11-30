@@ -55,6 +55,8 @@ local invisibleObstacleGroup;
 
 local runningMan;
 
+local score;
+
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -441,7 +443,13 @@ function scene:create( event )
    end
 
    local function gameOverListener(event) 
-      composer.gotoScene("scene3")
+      local eogFlag = true;
+      composer.gotoScene("scene3", {
+         effect = "slideUp",
+         time = 100,
+         params = {eogFlag = true, finalScore = score}
+      });
+      composer.removeScene("scene2", true);
       -- timerGameOver:pause( );
    end
 
@@ -457,11 +465,10 @@ function scene:create( event )
             gameOver.alpha = 0.4;
             sceneGroup:insert(gameOver);
 
-            timerGameOver = timer.performWithDelay( 4000, gameOverListener)
-
             local gameOverText = display.newText("Game Over", display.contentCenterX, display.contentCenterY, native.systemFontBold, 44)
             sceneGroup:insert(gameOverText);
 
+            timerGameOver = timer.performWithDelay( 2000, gameOverListener)
 
          -- landing from a jump
          elseif(event.other.myName == "Ground") then
@@ -617,6 +624,8 @@ function scene:hide( event )
       -- Example: stop timers, stop animation, stop audio, etc.
       runningMan:pause();
       pauseGameMethod(true);
+      -- timer.pause(timer1);
+      -- timer.pause(timer2);
 
    elseif ( phase == "did" ) then
       -- Called immediately after scene goes off screen.
@@ -629,6 +638,9 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
    sceneGroup = self.view
+
+      timer.pause(timer1);
+      timer.pause(timer2);
 
       buildingGroup1:removeSelf();
       buildingGroup1 = nil;
