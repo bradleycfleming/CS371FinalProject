@@ -54,6 +54,10 @@ local obstacleGroup;
 local invisibleObstacleGroup;
 
 local runningMan;
+local obstacle;
+local drone;
+local invisibleObstacle;
+local invisibleDrone;
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -228,54 +232,90 @@ function scene:create( event )
    invisiblePlayer.myName = "Player";
    sceneGroup:insert(invisiblePlayer);
 
-   -- drone = display.newSprite(drone_sheet, drone_sequenceData)
-   -- drone.xScale = 2;
-   -- drone.yScale = 2;
-   -- drone.x = display.contentCenterX;
-   -- drone.y = display.contentCenterY;
-   -- sceneGroup:insert(drone);
-
    xOffset = 1200
-   for i = 1, 1 do
-      local obstacle = display.newSprite(obstacle_sheet, obstacle_sequenceData)
-      obstacle.xScale = 3;
-      obstacle.yScale = 3;
-      obstacle.x = display.contentCenterX + xOffset;
-      obstacle.y = display.contentCenterY * 1.25 + 20;
-      obstacle:setSequence( "trash" )
-      obstacle.myName = "Danger";
-      obstacleGroup:insert( obstacle );
+   --small obstacle1
+   obstacle = display.newSprite(obstacle_sheet, obstacle_sequenceData)
+   obstacle.xScale = 3;
+   obstacle.yScale = 3;
+   obstacle.x = display.contentCenterX + xOffset;
+   obstacle.y = display.contentCenterY * 1.25 + 20;
+   obstacle:setSequence( "trash" )
+   obstacle.myName = "Danger";
+   obstacle.type = "small";
+   obstacle.spawned = false;
+   obstacleGroup:insert( obstacle );
 
-      invisibleObstacle = display.newRect(obstacle.x, obstacle.y, 80, 96);
-      invisibleObstacle:setFillColor(0.5, 0, 0);
-      invisibleObstacle.alpha = invisibleAlpha;
-      invisibleObstacle.yScale = 1;
-      invisibleObstacle.xScale = 1;
-      invisibleObstacle.myName = "Danger";
-      invisibleObstacleGroup:insert( invisibleObstacle )
-         
-      -- xOffset = xOffset + 100;
-   end
+   invisibleObstacle = display.newRect(obstacle.x, obstacle.y, 80, 96);
+   invisibleObstacle:setFillColor(0.5, 0, 0);
+   invisibleObstacle.alpha = invisibleAlpha;
+   invisibleObstacle.yScale = 1;
+   invisibleObstacle.xScale = 1;
+   invisibleObstacle.myName = "Danger";
+   invisibleObstacleGroup:insert( invisibleObstacle )
+
+   --tallObstacle
+   tallObstacle = display.newSprite(obstacle_sheet, obstacle_sequenceData)
+   tallObstacle.xScale = 3;
+   tallObstacle.yScale = 3;
+   tallObstacle.x = display.contentCenterX - xOffset;
+   tallObstacle.y = display.contentCenterY * 1.25 - 32 ;
+   tallObstacle:setSequence( "trafficLight" )
+   tallObstacle.myName = "Danger";
+   tallObstacle.type = "tall";
+   tallObstacle.spawned = false;
+   obstacleGroup:insert( tallObstacle );
+
+   invisibletallObstacle = display.newRect(tallObstacle.x, tallObstacle.y, 60, 192);
+   invisibletallObstacle:setFillColor(0.5, 0, 0);
+   invisibletallObstacle.alpha = invisibleAlpha;
+   invisibletallObstacle.yScale = 1;
+   invisibletallObstacle.xScale = 1;
+   invisibletallObstacle.myName = "Danger";
+   invisibleObstacleGroup:insert( invisibletallObstacle )
+
+   --small obstacle2
+   -- obstacle2 = display.newSprite(obstacle_sheet, obstacle_sequenceData)
+   -- obstacle2.xScale = 3;
+   -- obstacle2.yScale = 3;
+   -- obstacle2.x = display.contentCenterX + xOffset;
+   -- obstacle2.y = display.contentCenterY * 1.25 + 20;
+   -- obstacle2:setSequence( "trash" )
+   -- obstacle2.myName = "Danger";
+   -- obstacle2.type = "small";
+   -- obstacle2.spawned = false;
+   -- obstacleGroup:insert( obstacle2 );
+
+   -- invisibleobstacle2 = display.newRect(obstacle2.x, obstacle2.y, 80, 96);
+   -- invisibleobstacle2:setFillColor(0.5, 0, 0);
+   -- invisibleobstacle2.alpha = invisibleAlpha;
+   -- invisibleobstacle2.yScale = 1;
+   -- invisibleobstacle2.xScale = 1;
+   -- invisibleobstacle2.myName = "Danger";
+   -- invisibleObstacleGroup:insert( invisibleobstacle2 )
+      
+   --drone
+   drone = display.newSprite(drone_sheet, drone_sequenceData)
+   drone.xScale = 2;
+   drone.yScale = 2;
+   drone.x = display.contentCenterX - xOffset;
+   drone.y = display.contentCenterY - 35;
+   drone:setSequence( "flying" );
+   drone:play();
+   drone.myName = "Danger";
+   drone.type = "flying";
+   drone.spawned = false;
+   obstacleGroup:insert( drone );
+
+   invisibleDrone = display.newRect(drone.x, drone.y, 100, 60);
+   invisibleDrone:setFillColor(0.5, 0, 0);
+   invisibleDrone.alpha = invisibleAlpha;
+   invisibleDrone.yScale = 1;
+   invisibleDrone.xScale = 1;
+   invisibleDrone.myName = "Danger";
+   invisibleObstacleGroup:insert( invisibleDrone )
+
    sceneGroup:insert(obstacleGroup);
    sceneGroup:insert(invisibleObstacleGroup);
-
-   -- obstacle1 = display.newSprite(obstacle_sheet, obstacle_sequenceData)
-   -- obstacle1.xScale = 3;
-   -- obstacle1.yScale = 3;
-   -- obstacle1.x = display.contentCenterX * 1.8;
-   -- obstacle1.y = display.contentCenterY * 1.25 + 20;
-   -- obstacle1.myName = "Danger";
-   -- sceneGroup:insert(obstacle1);
-   -- table.insert(visibleObstacles, obstacle1);
-
-   -- invisibleObstacle1 = display.newRect(obstacle1.x, obstacle1.y, 80, 96);
-   -- invisibleObstacle1:setFillColor(0.5, 0, 0);
-   -- invisibleObstacle1.alpha = invisibleAlpha;
-   -- invisibleObstacle1.yScale = 1;
-   -- invisibleObstacle1.xScale = 1;
-   -- invisibleObstacle1.myName = "Danger";
-   -- sceneGroup:insert(invisibleObstacle1);
-   -- table.insert(invisibleObstacles, invisibleObstacle1);
 
    invisibleGroundPlatform = display.newRect(display.contentCenterX, display.contentHeight * 0.90 + 20, display.contentWidth, 256);
    invisibleGroundPlatform:setFillColor(0, 0, 0.5);
@@ -284,14 +324,6 @@ function scene:create( event )
    invisibleGroundPlatform.xScale = 1;
    invisibleGroundPlatform.myName = "Ground";
    sceneGroup:insert(invisibleGroundPlatform);
-
-   -- invisiblePlayer = display.newRect(runningMan.x, runningMan.y, 60, 160);
-   -- invisiblePlayer:setFillColor(0, 0.5, 0);
-   -- invisiblePlayer.alpha = invisibleAlpha;
-   -- invisiblePlayer.yScale = 1;
-   -- invisiblePlayer.xScale = 1;
-   -- invisiblePlayer.myName = "Player";
-   -- sceneGroup:insert(invisiblePlayer);
 
    scoreText = display.newText("0", 15, 30, native.systemFont, 40); 
    scoreText:setFillColor(1, 1, 1);
@@ -304,6 +336,8 @@ function scene:create( event )
    currentCrouch = false;
    pauseGame = false;
    score = 0;
+   lastSpawnTime = 3;
+   timeUntilNextSpawn = 6;
 
    local options = {
       effect = "slideDown",
@@ -402,7 +436,7 @@ function scene:create( event )
    sceneGroup:insert(pauseButton);
 
    function userTap(event)
-      if(event.x < 630 and event.x > 510 and event.y < 570) then
+      if(event.x < 630 and event.x > 510 and event.y < 85) then
          return
       end 
       if(event.phase == "began") then
@@ -410,7 +444,6 @@ function scene:create( event )
             --left tap
             if(event.x < display.contentCenterX) then
                if(currentJump == false and currentCrouch == false) then
-                  print("crouch started")
                   runningMan:setSequence("crouch");
                   currentCrouch = true;
                   physics.removeBody(invisiblePlayer);
@@ -429,7 +462,6 @@ function scene:create( event )
          end
       elseif(event.phase == "ended" and event.x < display.contentCenterX) then
          if(currentJump == false and not pauseGame and currentCrouch == true) then
-            print("crouch ended")
             runningMan:setSequence("running");
             runningMan:play();
             currentCrouch = false;
@@ -540,43 +572,70 @@ function scene:show( event )
                end
             end
 
+            print(lastSpawnTime);
             if score > 3 then
-               for i = 1,obstacleGroup.numChildren do
-                  local child = obstacleGroup[i];
+               obstacle.spawned = true;
+               -- lastSpawnTime = score;
+               
+            end
+            if(score > 15) then
+               tallObstacle.spawned = true;
+            end
+            if(score > 25) then
+               drone.spawned = true;
+            end
+            -- if(score > 35) then
+            --    drone.spawned = true;
+            -- end
+
+
+            for i = 1,obstacleGroup.numChildren do
+               local child = obstacleGroup[i];
+               if(child.spawned) then
                   local invisbleChild = invisibleObstacleGroup[i];
                   child.x = child.x - groundSpeed;
                   invisbleChild.x = invisbleChild.x - groundSpeed;
-                  if(child.x < -512) then
-                     child.x = math.random(1200, 1700);
+                  --spawn the obstacle again when its off screen if enough time has passed since last obstacle
+                  if(child.x < -512 and (score - lastSpawnTime) > timeUntilNextSpawn) then
+                     lastSpawnTime = score;
+                     timeUntilNextSpawn = math.random(1, 2);
+                     -- child.spawned = false;
+                     child.x = 1200;
                      invisbleChild.x = child.x;
 
-                     local obstacleSelection = math.random(1 ,  9);
-                     if obstacleSelection == 1 then
-                        child:setSequence("trash");
-                     elseif obstacleSelection == 2 then 
-                        child:setSequence("cone");
-                     elseif obstacleSelection == 3 then 
-                        child:setSequence("mailBox");
-                     elseif obstacleSelection == 4 then 
-                        child:setSequence("fireHydrant");
-                     elseif obstacleSelection == 5 then 
-                        child:setSequence("pillar");
-                     elseif obstacleSelection == 6 then 
-                        child:setSequence("trafficLight");
-                     elseif obstacleSelection == 7 then 
-                        child:setSequence("stopSign");
-                     elseif obstacleSelection == 8 then 
-                        child:setSequence("tire");
-                     elseif obstacleSelection == 9 then 
-                        child:setSequence("fence");
+                     if(child.type == "small") then
+                        local obstacleSelection = math.random(1, 6);
+                        if obstacleSelection == 1 then
+                           child:setSequence("trash");
+                        elseif obstacleSelection == 2 then 
+                           child:setSequence("cone");
+                        elseif obstacleSelection == 3 then 
+                           child:setSequence("mailBox");
+                        elseif obstacleSelection == 4 then 
+                           child:setSequence("fireHydrant");
+                        elseif obstacleSelection == 5 then 
+                           child:setSequence("pillar");
+                        elseif obstacleSelection == 6 then 
+                           child:setSequence("fence");
+                        end
+                     elseif(child.type == "tall") then
+                        local obstacleSelection = math.random(1, 2);
+                        if(obstacleSelection == 1) then
+                           child:setSequence("trafficLight");
+                        else
+                           child:setSequence("stopSign");
+                        end
+                     elseif(child.type == "flying") then
+                        child:setSequence("flying")
                      end
                   end
                end
             end
+            -- end
 
             invisiblePlayer.rotation = 0;
             if(currentCrouch) then
-               invisiblePlayer.x = display.contentCenterX * 0.4 + 40;
+               invisiblePlayer.x = display.contentCenterX * 0.4 + 40; 
                invisiblePlayer.y = display.contentCenterY * 1.19 + 23;
             else
                runningMan.y = invisiblePlayer.y - 12;
@@ -592,7 +651,6 @@ function scene:show( event )
             score = score + 1;
             scoreText.text = score
          end
-         print(score)
       end
 
       -- if statement prevents the game from performing moveBackground multiple times after opening scene2 multiple times
